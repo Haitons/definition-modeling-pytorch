@@ -37,7 +37,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--type", type=str, required=True,
-    help="compute ppl or bleu"
+    help="compute score or bleu"
 )
 parser.add_argument(
     "--wordlist", type=str, required=False,
@@ -59,7 +59,7 @@ parser.add_argument(
 args = parser.parse_args()
 assert args.datasplit in ["train", "val", "test"], ("--datasplit must be "
                                                     "train, val or test")
-assert args.type in ["ppl", "bleu"], ("--type must be ppl or bleu")
+assert args.type in ["score", "bleu"], ("--type must be score or bleu")
 
 with open(args.params, "r") as infile:
     model_params = json.load(infile)
@@ -132,6 +132,6 @@ if __name__ == '__main__':
     print('=========model architecture==========')
     print(model)
     print('=============== end =================')
-    if args.type == "ppl":
+    if args.type == "score":
         loss, ppl = test(model, dataloader, device)
     print("The test set Loss:{0:>6.6},Ppl:{1:>6.6}".format(loss, ppl))

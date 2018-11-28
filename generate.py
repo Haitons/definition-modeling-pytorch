@@ -3,8 +3,6 @@
 # author:haiton
 # datetime:18-9-21 上午10:18
 import torch
-import pickle
-import numpy as np
 import os
 import json
 from tqdm import tqdm

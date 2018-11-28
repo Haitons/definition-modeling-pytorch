@@ -201,7 +201,7 @@ parser.add_argument(
     help='use CUDA'
 )
 # set default args
-parser.set_defaults(tied=False, use_ch=False, use_he=False, fix_embeddings=True,
+parser.set_defaults(tied=False, use_ch=True, use_he=False, fix_embeddings=True,
                     use_seed=False, use_input=False, use_hidden=False, use_gated=True)
 # read args
 args = vars(parser.parse_args())

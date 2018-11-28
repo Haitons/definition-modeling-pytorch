@@ -13,7 +13,7 @@ class CharCNN(nn.Module):
     """
 
     def __init__(self, n_ch_tokens, ch_maxlen, ch_emb_size,
-                 ch_feature_maps, ch_kernel_sizes):
+                 ch_feature_maps, ch_kernel_sizes, ch_drop=0.25):
         super(CharCNN, self).__init__()
         assert len(ch_feature_maps) == len(ch_kernel_sizes)
 
@@ -22,6 +22,7 @@ class CharCNN(nn.Module):
         self.ch_emb_size = ch_emb_size
         self.ch_feature_maps = ch_feature_maps
         self.ch_kernel_sizes = ch_kernel_sizes
+        self.ch_drop = nn.Dropout(ch_drop)
 
         self.feature_mappers = nn.ModuleList()
         for i in range(len(self.ch_feature_maps)):
@@ -59,7 +60,7 @@ class CharCNN(nn.Module):
                 self.feature_mappers[i](x_embs).view(bsize, -1)
             )
 
-        return torch.cat(cnn_features, dim=1)
+        return self.ch_drop(torch.cat(cnn_features, dim=1))
 
     def init_ch(self):
         initrange = 0.5 / self.ch_emb_size
@@ -161,7 +162,7 @@ class Gated(nn.Module):
 
     def forward(self, rnn_type, num_layers, v, hidden):
         batch_size = v.size(0)
-        if  rnn_type == 'LSTM':
+        if rnn_type == 'LSTM':
             inp_h = torch.cat(
                 [torch.unsqueeze(v, 0).expand(num_layers, batch_size, -1).contiguous(),
                  hidden[0]], dim=-1)
